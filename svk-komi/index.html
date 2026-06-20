@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>СВК КОМИ — Ремонт техники, вентиляция, кондиционирование</title>
+  <meta name="description" content="СВК КОМИ — профессиональный ремонт бытовой техники, монтаж систем вентиляции и кондиционирования в Усинске. Рейтинг 4.7 ★ на Яндекс Картах." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['Poppins', 'sans-serif'],
+            body: ['Open Sans', 'sans-serif'],
+          },
+          colors: {
+            navy: {
+              950: '#030712',
+              900: '#0F172A',
+              800: '#1E293B',
+              700: '#334155',
+            },
+            brand: {
+              500: '#0369A1',
+              400: '#0EA5E9',
+              300: '#38BDF8',
+              200: '#7DD3FC',
+            },
+            cyan: {
+              400: '#22D3EE',
+              300: '#67E8F9',
+            }
+          },
+          animation: {
+            'fade-up': 'fadeUp 0.6s ease-out both',
+            'fade-in': 'fadeIn 0.8s ease-out both',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4,0,0.6,1) infinite',
+            'float': 'float 6s ease-in-out infinite',
+          },
+          keyframes: {
+            fadeUp: {
+              '0%': { opacity: '0', transform: 'translateY(30px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-12px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --color-primary: #0F172A;
+      --color-accent: #0369A1;
+      --color-cyan: #22D3EE;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { font-family: 'Open Sans', sans-serif; }
+
+    /* Скрытие скроллбара для scroll-scrub контейнера */
+    .scrub-container { overflow: hidden; }
+
+    /* Sticky canvas для скролл-раскадровки */
+    #scrub-section {
+      position: relative;
+    }
+    #scrub-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+    }
+    #scrub-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    #scrub-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    /* Hero video */
+    #hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.35;
+    }
+
+    /* Gradient overlays */
+    .hero-gradient {
+      background: linear-gradient(
+        to bottom,
+        rgba(3,7,18,0.5) 0%,
+        rgba(3,7,18,0.3) 40%,
+        rgba(3,7,18,0.7) 80%,
+        rgba(3,7,18,1) 100%
+      );
+    }
+
+    /* Service card hover */
+    .service-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(3,105,161,0.25);
+      border-color: rgba(14,165,233,0.5);
+    }
+
+    /* Stat counter */
+    .stat-number {
+      background: linear-gradient(135deg, #38BDF8, #22D3EE);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Review card */
+    .review-card {
+      transition: transform 0.25s ease;
+    }
+    .review-card:hover {
+      transform: translateY(-4px);
+    }
+
+    /* Nav link */
+    .nav-link {
+      position: relative;
+      transition: color 0.2s ease;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #22D3EE;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+    .nav-link:hover { color: #22D3EE; }
+
+    /* Scrub text fade */
+    .scrub-text {
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    /* Scroll indicator */
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+    .scroll-indicator { animation: scrollBounce 2s ease-in-out infinite; }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Intersection observer fade-up */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+  </style>
+</head>
+
+<body class="bg-navy-950 text-white font-body antialiased">
+
+  <!-- ═══════════════════════════════════════════
+       NAVIGATION
+  ═══════════════════════════════════════════ -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" aria-label="Главная навигация">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 lg:h-20">
+        <!-- Logo -->
+        <a href="#hero" class="flex items-center gap-2 group" aria-label="СВК КОМИ — на главную">
+          <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #0369A1, #22D3EE);">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-2"/>
+            </svg>
+          </div>
+          <span class="font-heading font-700 text-lg tracking-wide group-hover:text-brand-300 transition-colors">СВК <span class="text-brand-400">КОМИ</span></span>
+        </a>
+
+        <!-- Desktop nav -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#services" class="nav-link text-sm font-medium text-slate-300">Услуги</a>
+          <a href="#about" class="nav-link text-sm font-medium text-slate-300">О нас</a>
+          <a href="#reviews" class="nav-link text-sm font-medium text-slate-300">Отзывы</a>
+          <a href="#contacts" class="nav-link text-sm font-medium text-slate-300">Контакты</a>
+          <a href="tel:+78214452032"
+             class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all duration-200 hover:scale-105 cursor-pointer"
+             style="background: linear-gradient(135deg, #0369A1, #0EA5E9);"
+             aria-label="Позвонить нам">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+            </svg>
+            +7 (821) 445-20-32
+          </a>
+        </div>
+
+        <!-- Mobile menu button -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-navy-800 transition-colors" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu">
+          <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-navy-800" style="background: rgba(15,23,42,0.98);">
+      <div class="px-4 py-4 flex flex-col gap-4">
+        <a href="#services" class="text-slate-300 hover:text-white transition-colors py-2">Услуги</a>
+        <a href="#about" class="text-slate-300 hover:text-white transition-colors py-2">О нас</a>
+        <a href="#reviews" class="text-slate-300 hover:text-white transition-colors py-2">Отзывы</a>
+        <a href="#contacts" class="text-slate-300 hover:text-white transition-colors py-2">Контакты</a>
+        <a href="tel:+78214452032" class="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-semibold text-white" style="background: linear-gradient(135deg, #0369A1, #0EA5E9);">
+          +7 (821) 445-20-32
+        </a>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ═══════════════════════════════════════════
+       HERO SECTION
+  ═══════════════════════════════════════════ -->
+  <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+
+    <!-- MP4 Hero Background Video -->
+    <video id="hero-video"
+           autoplay muted loop playsinline
+           preload="metadata"
+           aria-hidden="true">
+      <source src="videos/hero-bg.mp4" type="video/mp4" />
+    </video>
+
+    <!-- Fallback gradient background -->
+    <div class="absolute inset-0 -z-10" style="background: radial-gradient(ellipse at 30% 50%, rgba(3,105,161,0.3) 0%, transparent 60%), radial-gradient(ellipse at 70% 20%, rgba(34,211,238,0.15) 0%, transparent 50%), #030712;"></div>
+
+    <!-- Gradient overlay -->
+    <div class="absolute inset-0 hero-gradient z-10"></div>
+
+    <!-- Animated grid background -->
+    <div class="absolute inset-0 z-0 opacity-10" aria-hidden="true"
+         style="background-image: linear-gradient(rgba(14,165,233,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(14,165,233,0.3) 1px, transparent 1px); background-size: 60px 60px;">
+    </div>
+
+    <!-- Content -->
+    <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold text-brand-300 border border-brand-500/40 mb-6"
+           style="background: rgba(3,105,161,0.15);"
+           role="text">
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse-slow" aria-hidden="true"></span>
+        Усинск, Республика Коми
+      </div>
+
+      <h1 class="font-heading text-4xl sm:text-5xl lg:text-7xl font-800 leading-tight mb-6">
+        Климат и комфорт<br />
+        <span style="background: linear-gradient(135deg, #38BDF8, #22D3EE); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">под контролем</span>
+      </h1>
+
+      <p class="max-w-2xl mx-auto text-lg sm:text-xl text-slate-300 leading-relaxed mb-10">
+        Ремонт бытовой техники, монтаж систем вентиляции и кондиционирования.<br class="hidden sm:block" />
+        Профессионально, с гарантией, с выездом на дом.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+        <a href="#contacts"
+           class="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-white text-base transition-all duration-200 hover:scale-105 hover:shadow-lg cursor-pointer"
+           style="background: linear-gradient(135deg, #0369A1, #0EA5E9); box-shadow: 0 0 30px rgba(14,165,233,0.3);">
+          Оставить заявку
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </a>
+        <a href="tel:+78214452032"
+           class="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-white text-base border border-slate-600 hover:border-brand-400 transition-all duration-200 hover:bg-navy-800 cursor-pointer">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+          </svg>
+          +7 (821) 445-20-32
+        </a>
+      </div>
+
+      <!-- Trust signals -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-slate-400">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+          </svg>
+          <span><strong class="text-white">4.7</strong> на Яндекс Картах</span>
+        </div>
+        <div class="hidden sm:block w-px h-4 bg-slate-700" aria-hidden="true"></div>
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+          <span>Гарантия на работы</span>
+        </div>
+        <div class="hidden sm:block w-px h-4 bg-slate-700" aria-hidden="true"></div>
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+          </svg>
+          <span>Выезд на дом</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 scroll-indicator" aria-hidden="true">
+      <div class="flex flex-col items-center gap-2">
+        <span class="text-xs text-slate-500 uppercase tracking-widest">Прокрутите</span>
+        <div class="w-5 h-8 border border-slate-600 rounded-full flex items-start justify-center p-1">
+          <div class="w-1 h-2 rounded-full bg-brand-400"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SCROLL SCRUB SECTION (Apple-style)
+  ═══════════════════════════════════════════ -->
+  <div id="scrub-section" style="height: 400vh;">
+    <div id="scrub-sticky">
+      <!-- Scrub Video -->
+      <video id="scrub-video"
+             muted playsinline
+             preload="auto"
+             aria-hidden="true">
+        <source src="videos/scrub-story.mp4" type="video/mp4" />
+      </video>
+
+      <!-- Dark overlay -->
+      <div class="absolute inset-0" style="background: rgba(3,7,18,0.45);"></div>
+
+      <!-- Overlay text layers (controlled by JS) -->
+      <div id="scrub-overlay" class="px-4 text-center">
+
+        <!-- Frame 1 -->
+        <div id="scrub-frame-1" class="scrub-text absolute inset-0 flex flex-col justify-center items-center px-4 text-center">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold text-cyan-300 border border-cyan-500/30 mb-4" style="background: rgba(34,211,238,0.1);">
+            Шаг 1
+          </div>
+          <h2 class="font-heading text-3xl sm:text-5xl lg:text-6xl font-700 max-w-3xl leading-tight">
+            Диагностика<br/>
+            <span style="background: linear-gradient(135deg, #38BDF8, #22D3EE); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">за 30 минут</span>
+          </h2>
+          <p class="mt-4 text-slate-300 text-lg max-w-xl">Определяем неисправность быстро и точно с помощью профессионального оборудования</p>
+        </div>
+
+        <!-- Frame 2 -->
+        <div id="scrub-frame-2" class="scrub-text absolute inset-0 flex flex-col justify-center items-center px-4 text-center" style="opacity:0;transform:translateY(20px);">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold text-cyan-300 border border-cyan-500/30 mb-4" style="background: rgba(34,211,238,0.1);">
+            Шаг 2
+          </div>
+          <h2 class="font-heading text-3xl sm:text-5xl lg:text-6xl font-700 max-w-3xl leading-tight">
+            Ремонт<br/>
+            <span style="background: linear-gradient(135deg, #38BDF8, #22D3EE); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">с гарантией</span>
+          </h2>
+          <p class="mt-4 text-slate-300 text-lg max-w-xl">Используем только оригинальные запасные части от проверенных поставщиков</p>
+        </div>
+
+        <!-- Frame 3 -->
+        <div id="scrub-frame-3" class="scrub-text absolute inset-0 flex flex-col justify-center items-center px-4 text-center" style="opacity:0;transform:translateY(20px);">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold text-cyan-300 border border-cyan-500/30 mb-4" style="background: rgba(34,211,238,0.1);">
+            Шаг 3
+          </div>
+          <h2 class="font-heading text-3xl sm:text-5xl lg:text-6xl font-700 max-w-3xl leading-tight">
+            Монтаж<br/>
+            <span style="background: linear-gradient(135deg, #38BDF8, #22D3EE); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">под ключ</span>
+          </h2>
+          <p class="mt-4 text-slate-300 text-lg max-w-xl">Устанавливаем кондиционеры и системы вентиляции любой сложности</p>
+        </div>
+
+        <!-- Frame 4 -->
+        <div id="scrub-frame-4" class="scrub-text absolute inset-0 flex flex-col justify-center items-center px-4 text-center" style="opacity:0;transform:translateY(20px);">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold text-cyan-300 border border-cyan-500/30 mb-4" style="background: rgba(34,211,238,0.1);">
+            Результат
+          </div>
+          <h2 class="font-heading text-3xl sm:text-5xl lg:text-6xl font-700 max-w-3xl leading-tight">
+            Ваш комфорт —<br/>
+            <span style="background: linear-gradient(135deg, #38BDF8, #22D3EE); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">наша цель</span>
+          </h2>
+          <p class="mt-4 text-slate-300 text-lg max-w-xl">Более 100 довольных клиентов в Усинске</p>
+          <a href="#contacts" class="mt-8 inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white text-base transition-all duration-200 hover:scale-105 pointer-events-auto"
+             style="background: linear-gradient(135deg, #0369A1, #0EA5E9);">
+            Записаться на сервис
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-navy-800">
+        <div id="scrub-progress" class="h-full transition-none" style="width: 0%; background: linear-gradient(90deg, #0369A1, #22D3EE);"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SERVICES SECTION
+  ═══════════════════════════════════════════ -->
+  <section id="services" class="py-24 lg:py-32 px-4">
+    <div class="max-w-7xl mx-auto">
+
+      <!-- Header -->
+      <div class="text-center mb-16 reveal">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold text-brand-300 border border-brand-500/40 mb-4" style="background: rgba(3,105,161,0.15);">
+          Наши услуги
+        </div>
+        <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-700 mb-4">
+          Всё для вашего<br/>
+          <span style="background: linear-gradient(135deg, #38BDF8, #22D3EE); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">климатического комфорта</span>
+        </h2>
+        <p class="text-slate-400 text-lg max-w-2xl mx-auto">Профессиональные услуги по ремонту, монтажу и обслуживанию климатической техники в Усинске</p>
+      </div>
+
+      <!-- Services Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Card 1: Кондиционеры -->
+        <article class="service-card bg-navy-900 border border-navy-700 rounded-2xl p-6 cursor-default reveal reveal-delay-1">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background: linear-gradient(135deg, rgba(3,105,161,0.3), rgba(14,165,233,0.2)); border: 1px solid rgba(14,165,233,0.2);">
+            <svg class="w-6 h-6 text-brand-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-2"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-600 text-lg mb-2 text-white">Кондиционирование</h3>
+          <p class="text-slate-400 text-sm leading-relaxed mb-4">Установка, ремонт и техническое обслуживание кондиционеров всех марок. Гарантия на все виды работ.</p>
+          <ul class="space-y-1.5 text-sm text-slate-400">
+            <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-cyan-400 flex-shrink-0" aria-hidden="true"></span>Монтаж сплит-систем</li>
+            <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-cyan-400 flex-shrink-0" aria-hidden="true"></span>Заправка фреоном</li>
+            <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-cyan-400 flex-shrink-0" aria-hidden="true"></span>Сезонное обслуживание</li>
+          </ul>
+        </article>
+
+        <!-- Card 2: Вентиляция -->
+        <article class="service-card bg-navy-900 border border-navy-700 rounded-2xl p-6 cursor-default reveal reveal-delay-2">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background: linear-gradient(135deg, rgba(3,105,161,0.3), rgba(14,165,233,0.2)); border: 1px solid rgba(14,165,233,0.2);">
+            <svg class="w-6 h-6 text-brand-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-600 text-lg mb-2 text-white">Системы вентиляции</h3>
+          <p class="text-slate-400 text-sm leading-relaxed mb-4">Проектирование и монтаж приточно-вытяжных систем для жилых и коммерческих помещений.</p>
+          <ul class="space-y-1.5 text-sm text-slate-400">
+            <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-cyan-400 flex-shrink-0" aria-hidden="true"></span>Приточная вентиляция</li>
+            <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-cyan-400 flex-shrink-0" aria-hidden="true"></span>Вытяжные системы</li>
+            <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-cyan-400 flex-shrink-0" aria-hidden="true"></span>Рекуперация тепла</li>
+          </ul>
+        </article>
+
+        <!-- Card 3: Ремонт техники -->
+        <article class="service-card bg-navy-900 border border-navy-700 rounded-2xl p-6 cursor-default reveal reveal-delay-3">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background: linear-gradient(135deg, rgba(3,105,161,0.3), rgba(14,165,233,0.2)); border: 1px solid rgba(14,165,238,0.2);">
+            <svg class="w-6 h-6 text-brand-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-600 text-lg mb-2 text-white">Ремонт техники</h3>
+          <p class="text-slate-400 text-sm leading-relaxed mb-4">Профессиональный ремонт бытовой техники с выездом на дом или в мастерскую.</p>
+          <ul class="space-y-1.5 text-sm text-slate-400">
+            <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-cyan-400 flex-shrink-0" aria-hidden="true"></span>Стиральные машины</li>
+            <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-cyan-400 flex-shrink-0" aria-hidden="true"></span>Холодильники</li>
+            <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-cyan-400 flex-shrink-0" aria-hidden="true"></span>Посудомоечные машины</li>
+          </ul>
+        </article>
+
+        <!-- Card 4: Аспирация -->
+        <article class="service-card bg-navy-900 border border-navy-700 rounded-2xl p-6 cursor-default reveal reveal-delay-1">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background: linear-gradient(135deg, rgba(3,105,161,0.3), rgba(14,165,233,0.2)); border: 1px solid rgba(14,165,233,0.2);">
+            <svg class="w-6 h-6 text-brand-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-600 text-lg mb-2 text-white">Аспирационные системы</h3>
+          <p class="text-slate-400 text-sm leading-relaxed mb-4">Монтаж и обслуживание промышленных аспирационных систем для производств и мастерских.</p>
+          <ul class="space-y-1.5 text-sm text-slate-400">
+            <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-cyan-400 flex-shrink-0" aria-hidden="true"></span>Проектирование</li>
+            <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-cyan-400 flex-shrink-0" aria-hidden="true"></span>Монтаж под ключ</li>
+            <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-cyan-400 flex-shrink-0" aria-hidden="true"></span>Техобслуживание</li>
+          </ul>
+        </article>
+
+        <!-- Card 5: Гарантийный ремонт -->
+        <article class="service-card bg-navy-900 border border-navy-700 rounded-2xl p-6 cursor-default reveal reveal-delay-2">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background: linear-gradient(135deg, rgba(3,105,161,0.3), rgba(14,165,233,0.2)); border: 1px solid rgba(14,165,233,0.2);">
+            <svg class="w-6 h-6 text-brand-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-600 text-lg mb-2 text-white">Гарантийный ремонт</h3>
+          <p class="text-slate-400 text-sm leading-relaxed mb-4">Официальный гарантийный сервис для техники, находящейся на гарантии производителя.</p>
+          <ul class="space-y-1.5 text-sm text-slate-400">
+            <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-cyan-400 flex-shrink-0" aria-hidden="true"></span>Без доплат</li>
+            <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-cyan-400 flex-shrink-0" aria-hidden="true"></span>Оригинальные запчасти</li>
+            <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-cyan-400 flex-shrink-0" aria-hidden="true"></span>Официальные документы</li>
+          </ul>
+        </article>
+
+        <!-- Card 6: Выезд на дом -->
+        <article class="service-card bg-navy-900 border border-navy-700 rounded-2xl p-6 cursor-default reveal reveal-delay-3">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background: linear-gradient(135deg, rgba(3,105,161,0.3), rgba(14,165,233,0.2)); border: 1px solid rgba(14,165,233,0.2);">
+            <svg class="w-6 h-6 text-brand-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-600 text-lg mb-2 text-white">Выезд на дом</h3>
+          <p class="text-slate-400 text-sm leading-relaxed mb-4">Мастер приедет в удобное для вас время. Диагностика и мелкий ремонт прямо у вас дома.</p>
+          <ul class="space-y-1.5 text-sm text-slate-400">
+            <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-cyan-400 flex-shrink-0" aria-hidden="true"></span>По всему Усинску</li>
+            <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-cyan-400 flex-shrink-0" aria-hidden="true"></span>Предварительная запись</li>
+            <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-cyan-400 flex-shrink-0" aria-hidden="true"></span>Оплата картой / Kaspi</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       ABOUT / STATS SECTION
+  ═══════════════════════════════════════════ -->
+  <section id="about" class="py-24 lg:py-32 px-4 relative overflow-hidden">
+    <!-- Background glow -->
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true"
+         style="background: radial-gradient(ellipse at 50% 50%, rgba(3,105,161,0.12) 0%, transparent 70%);"></div>
+
+    <div class="max-w-7xl mx-auto relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+        <!-- Left: Text -->
+        <div class="reveal">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold text-brand-300 border border-brand-500/40 mb-6" style="background: rgba(3,105,161,0.15);">
+            О компании
+          </div>
+          <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-700 mb-6 leading-tight">
+            Надёжный партнёр<br/>
+            <span style="background: linear-gradient(135deg, #38BDF8, #22D3EE); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">в Усинске</span>
+          </h2>
+          <p class="text-slate-400 text-base leading-relaxed mb-6">
+            СВК КОМИ — профессиональный сервисный центр в Усинске, специализирующийся на ремонте бытовой техники, монтаже систем вентиляции и кондиционирования воздуха.
+          </p>
+          <p class="text-slate-400 text-base leading-relaxed mb-8">
+            Работаем быстро и качественно. Используем профессиональный инструмент и только оригинальные запчасти. Принимаем к оплате банковские карты и Kaspi.
+          </p>
+
+          <!-- Contact details -->
+          <div class="space-y-3">
+            <div class="flex items-center gap-3 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-brand-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              </svg>
+              ул. 60 лет Октября, 4/1, Усинск, Республика Коми
+            </div>
+            <div class="flex items-center gap-3 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-brand-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+              </svg>
+              <a href="tel:+78214452032" class="hover:text-brand-300 transition-colors cursor-pointer">+7 (821) 445-20-32</a>
+            </div>
+            <div class="flex items-center gap-3 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-brand-400 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.932z"/>
+              </svg>
+              <a href="https://t.me/ainurasbapov" target="_blank" rel="noopener noreferrer" class="hover:text-brand-300 transition-colors cursor-pointer">@ainurasbapov</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Stats -->
+        <div class="grid grid-cols-2 gap-6">
+          <div class="bg-navy-900 border border-navy-700 rounded-2xl p-6 text-center reveal reveal-delay-1">
+            <div class="stat-number font-heading text-4xl lg:text-5xl font-800 mb-2">4.7</div>
+            <div class="flex justify-center mb-2" aria-label="4.7 из 5 звёзд">
+              <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+              </svg>
+            </div>
+            <p class="text-slate-400 text-sm">Яндекс Карты</p>
+          </div>
+
+          <div class="bg-navy-900 border border-navy-700 rounded-2xl p-6 text-center reveal reveal-delay-2">
+            <div class="stat-number font-heading text-4xl lg:text-5xl font-800 mb-2">15+</div>
+            <p class="text-slate-400 text-sm">Отзывов клиентов</p>
+          </div>
+
+          <div class="bg-navy-900 border border-navy-700 rounded-2xl p-6 text-center reveal reveal-delay-3">
+            <div class="stat-number font-heading text-4xl lg:text-5xl font-800 mb-2">100+</div>
+            <p class="text-slate-400 text-sm">Выполненных заявок</p>
+          </div>
+
+          <div class="bg-navy-900 border border-navy-700 rounded-2xl p-6 text-center reveal reveal-delay-4">
+            <div class="stat-number font-heading text-4xl lg:text-5xl font-800 mb-2">6</div>
+            <p class="text-slate-400 text-sm">Видов услуг</p>
+          </div>
+
+          <!-- Badges -->
+          <div class="col-span-2 bg-navy-900 border border-navy-700 rounded-2xl p-5 reveal">
+            <div class="flex flex-wrap gap-3 justify-center">
+              <span class="px-3 py-1.5 rounded-lg text-xs font-medium text-cyan-300 border border-cyan-800/50" style="background: rgba(34,211,238,0.08);">Оплата картой</span>
+              <span class="px-3 py-1.5 rounded-lg text-xs font-medium text-cyan-300 border border-cyan-800/50" style="background: rgba(34,211,238,0.08);">Kaspi Red</span>
+              <span class="px-3 py-1.5 rounded-lg text-xs font-medium text-cyan-300 border border-cyan-800/50" style="background: rgba(34,211,238,0.08);">Предзапись</span>
+              <span class="px-3 py-1.5 rounded-lg text-xs font-medium text-cyan-300 border border-cyan-800/50" style="background: rgba(34,211,238,0.08);">ОГРН: 310110608100012</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       REVIEWS SECTION
+  ═══════════════════════════════════════════ -->
+  <section id="reviews" class="py-24 lg:py-32 px-4" style="background: rgba(15,23,42,0.5);">
+    <div class="max-w-7xl mx-auto">
+
+      <div class="text-center mb-16 reveal">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold text-brand-300 border border-brand-500/40 mb-4" style="background: rgba(3,105,161,0.15);">
+          Отзывы
+        </div>
+        <h2 class="font-heading text-3xl sm:text-4xl font-700 mb-4">
+          Что говорят
+          <span style="background: linear-gradient(135deg, #38BDF8, #22D3EE); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">клиенты</span>
+        </h2>
+        <p class="text-slate-400">Рейтинг 4.7 ★ на основе 15 отзывов на Яндекс Картах</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Review 1 -->
+        <article class="review-card bg-navy-900 border border-navy-700 rounded-2xl p-6 reveal reveal-delay-1">
+          <div class="flex items-center gap-1 mb-3" aria-label="5 звёзд">
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <blockquote class="text-slate-300 text-sm leading-relaxed mb-4">"Отличный мастер! Быстро и качественно отремонтировал стиральную машину. Приехал в тот же день, всё объяснил. Рекомендую!"</blockquote>
+          <footer class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-brand-500 flex items-center justify-center text-white text-xs font-semibold" aria-hidden="true">А</div>
+            <div>
+              <p class="text-white text-sm font-medium">Анна К.</p>
+              <p class="text-slate-500 text-xs">Яндекс Карты</p>
+            </div>
+          </footer>
+        </article>
+
+        <!-- Review 2 -->
+        <article class="review-card bg-navy-900 border border-navy-700 rounded-2xl p-6 reveal reveal-delay-2">
+          <div class="flex items-center gap-1 mb-3" aria-label="5 звёзд">
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <blockquote class="text-slate-300 text-sm leading-relaxed mb-4">"Установили кондиционер чисто и аккуратно. Работает отлично. Цена адекватная. Молодцы, буду обращаться снова!"</blockquote>
+          <footer class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-cyan-700 flex items-center justify-center text-white text-xs font-semibold" aria-hidden="true">М</div>
+            <div>
+              <p class="text-white text-sm font-medium">Михаил Д.</p>
+              <p class="text-slate-500 text-xs">Яндекс Карты</p>
+            </div>
+          </footer>
+        </article>
+
+        <!-- Review 3 -->
+        <article class="review-card bg-navy-900 border border-navy-700 rounded-2xl p-6 reveal reveal-delay-3">
+          <div class="flex items-center gap-1 mb-3" aria-label="4 звезды">
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-slate-600" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <blockquote class="text-slate-300 text-sm leading-relaxed mb-4">"Обращались по вентиляции. Всё сделали профессионально. Мастер объяснил что и как. Немного подождали, но результат стоит того."</blockquote>
+          <footer class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-navy-700 flex items-center justify-center text-white text-xs font-semibold" aria-hidden="true">Е</div>
+            <div>
+              <p class="text-white text-sm font-medium">Елена С.</p>
+              <p class="text-slate-500 text-xs">Яндекс Карты</p>
+            </div>
+          </footer>
+        </article>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       CONTACTS SECTION
+  ═══════════════════════════════════════════ -->
+  <section id="contacts" class="py-24 lg:py-32 px-4">
+    <div class="max-w-7xl mx-auto">
+
+      <div class="text-center mb-16 reveal">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold text-brand-300 border border-brand-500/40 mb-4" style="background: rgba(3,105,161,0.15);">
+          Контакты
+        </div>
+        <h2 class="font-heading text-3xl sm:text-4xl font-700 mb-4">
+          Свяжитесь
+          <span style="background: linear-gradient(135deg, #38BDF8, #22D3EE); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">с нами</span>
+        </h2>
+        <p class="text-slate-400">Запишитесь на ремонт или задайте вопрос удобным способом</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+
+        <!-- Contact cards -->
+        <div class="space-y-4 reveal">
+          <!-- Phone -->
+          <a href="tel:+78214452032"
+             class="flex items-center gap-4 p-5 bg-navy-900 border border-navy-700 rounded-2xl hover:border-brand-500/50 transition-all duration-200 hover:shadow-lg group cursor-pointer"
+             aria-label="Позвонить +7 821 445-20-32">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, rgba(3,105,161,0.3), rgba(14,165,233,0.2));">
+              <svg class="w-5 h-5 text-brand-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-slate-400 text-xs mb-0.5">Телефон</p>
+              <p class="text-white font-semibold group-hover:text-brand-300 transition-colors">+7 (821) 445-20-32</p>
+            </div>
+          </a>
+
+          <!-- WhatsApp -->
+          <a href="https://wa.me/79125555401"
+             target="_blank" rel="noopener noreferrer"
+             class="flex items-center gap-4 p-5 bg-navy-900 border border-navy-700 rounded-2xl hover:border-brand-500/50 transition-all duration-200 hover:shadow-lg group cursor-pointer"
+             aria-label="Написать в WhatsApp">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, rgba(37,211,102,0.2), rgba(37,211,102,0.1));">
+              <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-slate-400 text-xs mb-0.5">WhatsApp</p>
+              <p class="text-white font-semibold group-hover:text-green-400 transition-colors">+7 (912) 555-54-01</p>
+            </div>
+          </a>
+
+          <!-- Telegram -->
+          <a href="https://t.me/ainurasbapov"
+             target="_blank" rel="noopener noreferrer"
+             class="flex items-center gap-4 p-5 bg-navy-900 border border-navy-700 rounded-2xl hover:border-brand-500/50 transition-all duration-200 hover:shadow-lg group cursor-pointer"
+             aria-label="Написать в Telegram">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, rgba(3,155,229,0.2), rgba(3,155,229,0.1));">
+              <svg class="w-5 h-5 text-sky-400" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.932z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-slate-400 text-xs mb-0.5">Telegram</p>
+              <p class="text-white font-semibold group-hover:text-sky-400 transition-colors">@ainurasbapov</p>
+            </div>
+          </a>
+
+          <!-- Address -->
+          <div class="flex items-start gap-4 p-5 bg-navy-900 border border-navy-700 rounded-2xl">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, rgba(3,105,161,0.3), rgba(14,165,233,0.2));">
+              <svg class="w-5 h-5 text-brand-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-slate-400 text-xs mb-0.5">Адрес</p>
+              <p class="text-white font-medium">ул. 60 лет Октября, 4/1</p>
+              <p class="text-slate-400 text-sm">Усинск, Республика Коми</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="bg-navy-900 border border-navy-700 rounded-2xl p-8 reveal reveal-delay-2">
+          <h3 class="font-heading font-600 text-xl mb-2">Оставить заявку</h3>
+          <p class="text-slate-400 text-sm mb-6">Перезвоним в течение 30 минут в рабочее время</p>
+
+          <form id="contact-form" novalidate class="space-y-4" aria-label="Форма заявки">
+            <div>
+              <label for="name" class="block text-sm font-medium text-slate-300 mb-1.5">Ваше имя <span class="text-red-400" aria-label="обязательное поле">*</span></label>
+              <input type="text" id="name" name="name" required
+                     class="w-full px-4 py-3 rounded-xl bg-navy-800 border border-navy-600 text-white placeholder-slate-500 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400 transition-colors text-sm"
+                     placeholder="Введите ваше имя"
+                     autocomplete="name" />
+              <p id="name-error" class="hidden mt-1 text-xs text-red-400" role="alert"></p>
+            </div>
+
+            <div>
+              <label for="phone" class="block text-sm font-medium text-slate-300 mb-1.5">Телефон <span class="text-red-400" aria-label="обязательное поле">*</span></label>
+              <input type="tel" id="phone" name="phone" required
+                     class="w-full px-4 py-3 rounded-xl bg-navy-800 border border-navy-600 text-white placeholder-slate-500 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400 transition-colors text-sm"
+                     placeholder="+7 (___) ___-__-__"
+                     autocomplete="tel" />
+              <p id="phone-error" class="hidden mt-1 text-xs text-red-400" role="alert"></p>
+            </div>
+
+            <div>
+              <label for="service" class="block text-sm font-medium text-slate-300 mb-1.5">Услуга</label>
+              <select id="service" name="service"
+                      class="w-full px-4 py-3 rounded-xl bg-navy-800 border border-navy-600 text-white focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400 transition-colors text-sm cursor-pointer appearance-none">
+                <option value="">Выберите услугу</option>
+                <option value="ac">Кондиционирование</option>
+                <option value="ventilation">Системы вентиляции</option>
+                <option value="repair">Ремонт техники</option>
+                <option value="aspiration">Аспирационные системы</option>
+                <option value="warranty">Гарантийный ремонт</option>
+                <option value="other">Другое</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="message" class="block text-sm font-medium text-slate-300 mb-1.5">Описание проблемы</label>
+              <textarea id="message" name="message" rows="3"
+                        class="w-full px-4 py-3 rounded-xl bg-navy-800 border border-navy-600 text-white placeholder-slate-500 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400 transition-colors text-sm resize-none"
+                        placeholder="Опишите неисправность или вопрос..."></textarea>
+            </div>
+
+            <button type="submit" id="submit-btn"
+                    class="w-full py-3.5 px-6 rounded-xl font-semibold text-white text-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                    style="background: linear-gradient(135deg, #0369A1, #0EA5E9);">
+              <span id="submit-text">Отправить заявку</span>
+              <span id="submit-loading" class="hidden items-center justify-center gap-2">
+                <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+                Отправка...
+              </span>
+            </button>
+
+            <!-- Success message -->
+            <div id="form-success" class="hidden p-4 rounded-xl border border-green-500/30 text-green-400 text-sm text-center" style="background: rgba(34,197,94,0.1);" role="status">
+              Заявка принята! Перезвоним вам в ближайшее время.
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+  <footer class="border-t border-navy-800 py-10 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <!-- Logo -->
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #0369A1, #22D3EE);">
+            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-2"/>
+            </svg>
+          </div>
+          <span class="font-heading font-600 text-base">СВК <span class="text-brand-400">КОМИ</span></span>
+        </div>
+
+        <!-- Links -->
+        <nav class="flex flex-wrap items-center justify-center gap-6 text-sm text-slate-400" aria-label="Нижняя навигация">
+          <a href="#services" class="hover:text-white transition-colors">Услуги</a>
+          <a href="#about" class="hover:text-white transition-colors">О нас</a>
+          <a href="#reviews" class="hover:text-white transition-colors">Отзывы</a>
+          <a href="#contacts" class="hover:text-white transition-colors">Контакты</a>
+        </nav>
+
+        <!-- Legal -->
+        <p class="text-slate-600 text-xs text-center">
+          ИП Асбапов А.Р. &nbsp;|&nbsp; ИНН 023600995500<br/>
+          &copy; 2024 СВК КОМИ. Все права защищены.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ═══════════════════════════════════════════
+       JAVASCRIPT
+  ═══════════════════════════════════════════ -->
+  <script>
+    // ── Navbar scroll effect ──────────────────────
+    const navbar = document.getElementById('navbar');
+    const heroHeight = window.innerHeight;
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        navbar.style.background = 'rgba(15,23,42,0.97)';
+        navbar.style.backdropFilter = 'blur(12px)';
+        navbar.style.borderBottom = '1px solid rgba(51,65,85,0.5)';
+        navbar.style.boxShadow = '0 4px 30px rgba(0,0,0,0.3)';
+      } else {
+        navbar.style.background = 'transparent';
+        navbar.style.backdropFilter = 'none';
+        navbar.style.borderBottom = 'none';
+        navbar.style.boxShadow = 'none';
+      }
+    }, { passive: true });
+
+
+    // ── Mobile menu ───────────────────────────────
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('menu-icon-open');
+    const iconClose = document.getElementById('menu-icon-close');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      const isOpen = !mobileMenu.classList.contains('hidden');
+      mobileMenu.classList.toggle('hidden');
+      iconOpen.classList.toggle('hidden', !isOpen);
+      iconClose.classList.toggle('hidden', isOpen);
+      mobileMenuBtn.setAttribute('aria-expanded', String(!isOpen));
+    });
+
+    // Close mobile menu on link click
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        iconOpen.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+
+    // ── Scroll Scrubbing ──────────────────────────
+    (function initScrub() {
+      const scrubSection = document.getElementById('scrub-section');
+      const scrubVideo = document.getElementById('scrub-video');
+      const scrubProgress = document.getElementById('scrub-progress');
+      const frames = [
+        document.getElementById('scrub-frame-1'),
+        document.getElementById('scrub-frame-2'),
+        document.getElementById('scrub-frame-3'),
+        document.getElementById('scrub-frame-4'),
+      ];
+
+      // Check reduced motion
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced) {
+        // Show all frames statically
+        frames.forEach(f => { f.style.opacity = '1'; f.style.transform = 'none'; });
+        return;
+      }
+
+      scrubVideo.addEventListener('loadedmetadata', () => {
+        scrubVideo.pause();
+      });
+
+      function updateScrub() {
+        const rect = scrubSection.getBoundingClientRect();
+        const sectionHeight = scrubSection.offsetHeight - window.innerHeight;
+        const scrolled = -rect.top;
+        const progress = Math.max(0, Math.min(1, scrolled / sectionHeight));
+
+        // Update progress bar
+        scrubProgress.style.width = (progress * 100) + '%';
+
+        // Scrub video
+        if (scrubVideo.duration && isFinite(scrubVideo.duration)) {
+          scrubVideo.currentTime = progress * scrubVideo.duration;
+        }
+
+        // Text frame transitions (4 segments)
+        const segment = progress * 4;
+        frames.forEach((frame, i) => {
+          const frameStart = i;
+          const frameEnd = i + 1;
+          const local = (segment - frameStart) / 1;
+
+          if (local <= 0) {
+            frame.style.opacity = '0';
+            frame.style.transform = 'translateY(20px)';
+          } else if (local >= 1) {
+            frame.style.opacity = i === 3 ? '1' : '0';
+            frame.style.transform = i === 3 ? 'translateY(0)' : 'translateY(-20px)';
+          } else {
+            // Fade in for first half, fade out for second
+            if (local < 0.5) {
+              const t = local * 2;
+              frame.style.opacity = t.toFixed(3);
+              frame.style.transform = `translateY(${(1 - t) * 20}px)`;
+            } else {
+              // Last frame stays visible
+              if (i === 3) {
+                frame.style.opacity = '1';
+                frame.style.transform = 'translateY(0)';
+              } else {
+                const t = (local - 0.5) * 2;
+                frame.style.opacity = (1 - t).toFixed(3);
+                frame.style.transform = `translateY(${-t * 20}px)`;
+              }
+            }
+          }
+        });
+      }
+
+      window.addEventListener('scroll', updateScrub, { passive: true });
+      updateScrub();
+    })();
+
+
+    // ── Intersection Observer (reveal animations) ─
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+
+    revealEls.forEach(el => revealObserver.observe(el));
+
+
+    // ── Contact Form ──────────────────────────────
+    const form = document.getElementById('contact-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const submitText = document.getElementById('submit-text');
+    const submitLoading = document.getElementById('submit-loading');
+    const formSuccess = document.getElementById('form-success');
+
+    function showError(inputId, msg) {
+      const errorEl = document.getElementById(inputId + '-error');
+      const inputEl = document.getElementById(inputId);
+      if (errorEl) { errorEl.textContent = msg; errorEl.classList.remove('hidden'); }
+      if (inputEl) { inputEl.classList.add('border-red-500'); }
+    }
+
+    function clearError(inputId) {
+      const errorEl = document.getElementById(inputId + '-error');
+      const inputEl = document.getElementById(inputId);
+      if (errorEl) { errorEl.classList.add('hidden'); }
+      if (inputEl) { inputEl.classList.remove('border-red-500'); }
+    }
+
+    ['name', 'phone'].forEach(id => {
+      document.getElementById(id)?.addEventListener('blur', () => {
+        const val = document.getElementById(id).value.trim();
+        if (val) clearError(id);
+      });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      let valid = true;
+
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+
+      clearError('name'); clearError('phone');
+
+      if (!name) { showError('name', 'Введите ваше имя'); valid = false; }
+      if (!phone) { showError('phone', 'Введите номер телефона'); valid = false; }
+      else if (!/^[\d\s\+\-\(\)]{7,}$/.test(phone)) { showError('phone', 'Введите корректный номер телефона'); valid = false; }
+
+      if (!valid) {
+        document.querySelector('.border-red-500')?.focus();
+        return;
+      }
+
+      // Simulate submit
+      submitBtn.disabled = true;
+      submitText.classList.add('hidden');
+      submitLoading.classList.remove('hidden');
+      submitLoading.classList.add('flex');
+
+      await new Promise(r => setTimeout(r, 1500));
+
+      submitBtn.disabled = false;
+      submitText.classList.remove('hidden');
+      submitLoading.classList.add('hidden');
+      submitLoading.classList.remove('flex');
+      formSuccess.classList.remove('hidden');
+      form.reset();
+
+      setTimeout(() => formSuccess.classList.add('hidden'), 5000);
+    });
+  </script>
+</body>
+</html>
